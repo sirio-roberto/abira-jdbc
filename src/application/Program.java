@@ -1,5 +1,7 @@
 package application;
 
+import model.dao.Dao;
+import model.dao.DaoFactory;
 import model.entities.Commodity;
 import model.entities.User;
 
@@ -9,6 +11,8 @@ public class Program {
     public static void main(String[] args) {
         Commodity commodity = new Commodity("All", "All", "custom");
         System.out.println(commodity);
+
+        Dao<?> userDao = DaoFactory.createUserDao();
 
         User user1 = new User("sirios1", "Sirio", "Enterprise", "sirio@gmail.com", new Date(), commodity);
         System.out.println(user1);
