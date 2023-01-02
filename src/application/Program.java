@@ -9,12 +9,9 @@ import java.util.Date;
 
 public class Program {
     public static void main(String[] args) {
-        Commodity commodity = new Commodity("All", "All", "custom");
-        System.out.println(commodity);
+        Dao<User> useDao = DaoFactory.createUserDao();
+        User user1 = useDao.findById("joao345");
 
-        Dao<?> userDao = DaoFactory.createUserDao();
-
-        User user1 = new User("sirios1", "Sirio", "Enterprise", "sirio@gmail.com", new Date(), commodity);
         System.out.println(user1);
     }
 }
