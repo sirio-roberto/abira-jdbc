@@ -2,6 +2,7 @@ package application;
 
 
 import db.DB;
+import db.DbIntegrityException;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -18,15 +19,15 @@ public class Program {
         try {
             conn = DB.getConnection();
             st = conn.prepareStatement(
-                    "UPDATE user "
-                    + "SET Telephone = ?");
-            st.setString(1, "55 51 123456789");
+                    "DELETE FROM user "
+                    + "WHERE Id = ?");
+            st.setString(1, "sirio45678");
 
             int affectedRows = st.executeUpdate();
             System.out.println("Done! " + affectedRows);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DbIntegrityException(e.getMessage());
         } finally {
             DB.closeStatement(st);
             DB.closeConnection();
