@@ -6,7 +6,7 @@ import model.entities.User;
 
 public class DaoFactory {
 
-    public static Dao<User> createUserDao() {
+    public static UserDao createUserDao() {
         return new UserDaoJDBC(DB.getConnection());
     }
 }
