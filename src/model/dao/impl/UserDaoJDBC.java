@@ -12,7 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDaoJDBC implements UserDao {
 
@@ -81,7 +83,34 @@ public class UserDaoJDBC implements UserDao {
 
     @Override
     public List<User> findAll() {
-        return null;
+        List<User> list = new ArrayList<>();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement(
+                    "SELECT u.*, c.Name AS CommodityName, c.Domain AS CommodityDomain " +
+                            "FROM abira.user AS u " +
+                            "INNER JOIN commodity c " +
+                            "ON c.Id = u.CommodityId " +
+                            "ORDER BY Name");
+            rs = st.executeQuery();
+            Map<String, Commodity> map = new HashMap<>();
+            while (rs.next()) {
+                Commodity com = map.get(rs.getString("CommodityId"));
+                if (com == null) {
+                    com = instantiateCommodity(rs);
+                    map.put(rs.getString("CommodityId"), com);
+                }
+                User user = instantiateUser(rs, com);
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
+        return list;
     }
 
     // in case the user does not specify a domain, we will return the default one (custom)

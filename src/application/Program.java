@@ -25,5 +25,12 @@ public class Program {
             System.out.println(u);
         }
         System.out.println();
+
+        System.out.println("--- TEST3 : user findAll ---");
+        List<User> users3 = userDao.findAll();
+        for (User u : users3) {
+            System.out.println(u);
+        }
+        System.out.println();
     }
 }
