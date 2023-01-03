@@ -10,8 +10,9 @@ import java.util.Date;
 public class Program {
     public static void main(String[] args) {
         Dao<User> useDao = DaoFactory.createUserDao();
-        User user1 = useDao.findById("joao345");
 
+        System.out.println("--- TEST1 : user findById ---");
+        User user1 = useDao.findById("joao345");
         System.out.println(user1);
     }
 }

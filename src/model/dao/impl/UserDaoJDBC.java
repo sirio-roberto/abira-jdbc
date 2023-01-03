@@ -47,23 +47,33 @@ public class UserDaoJDBC implements Dao<User> {
             st.setString(1, id);
             rs = st.executeQuery();
             if (rs.next()) {
-                Commodity commodity = new Commodity();
-                commodity.setId(rs.getString("CommodityId"));
-                commodity.setName(rs.getString("CommodityName"));
-                commodity.setDomain(rs.getString("CommodityDomain"));
-                User user = new User();
-                user.setId(rs.getString("Id"));
-                user.setName(rs.getString("Name"));
-                user.setUserType(rs.getString("UserType"));
-                user.setEmail(rs.getString("Email"));
-                user.setTimeCreated(rs.getDate("TimeCreated"));
-                user.setCommodity(commodity);
+                Commodity commodity = instantiateCommodity(rs);
+                User user = instantiateUser(rs, commodity);
                 return user;
             }
             return null;
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         }
+    }
+
+    private User instantiateUser(ResultSet rs, Commodity commodity) throws SQLException {
+        User user = new User();
+        user.setId(rs.getString("Id"));
+        user.setName(rs.getString("Name"));
+        user.setUserType(rs.getString("UserType"));
+        user.setEmail(rs.getString("Email"));
+        user.setTimeCreated(rs.getDate("TimeCreated"));
+        user.setCommodity(commodity);
+        return user;
+    }
+
+    private Commodity instantiateCommodity(ResultSet rs) throws SQLException {
+        Commodity commodity = new Commodity();
+        commodity.setId(rs.getString("CommodityId"));
+        commodity.setName(rs.getString("CommodityName"));
+        commodity.setDomain(rs.getString("CommodityDomain"));
+        return commodity;
     }
 
     @Override
