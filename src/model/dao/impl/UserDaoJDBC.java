@@ -7,10 +7,7 @@ import model.dao.UserDao;
 import model.entities.Commodity;
 import model.entities.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +22,28 @@ public class UserDaoJDBC implements UserDao {
     }
     @Override
     public void insert(User obj) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "INSERT INTO user " +
+                            "(Id, Name, UserType, Email, TimeCreated, CommodityId) " +
+                            "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, obj.getId());
+            st.setString(2, obj.getName());
+            st.setString(3, obj.getUserType());
+            st.setString(4, obj.getEmail());
+            st.setDate(5, new java.sql.Date(obj.getTimeCreated().getTime()));
+            st.setString(6, obj.getCommodity().getId());
+            int affectRows = st.executeUpdate();
+            if (affectRows == 0) {
+                throw new DbException("Unexpected error! No affected rows!");
 
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
