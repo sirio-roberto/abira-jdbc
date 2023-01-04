@@ -35,8 +35,14 @@ public class Program {
 
         System.out.println("--- TEST4 : user insert ---");
         User user4 = new User("venz12345", "Venz", "Supplier", "venz@gmail.com", new Date(), new Commodity("F3", "Seafood", "custom"));
-        userDao.insert(user4);
+        //userDao.insert(user4);
         System.out.println("User inserted = " + user4.getId());
+        System.out.println();
+
+        System.out.println("--- TEST5 : user update ---");
+        user1.setName("Jatão da Silva");
+        userDao.update(user1);
+        System.out.println("User updated!");
         System.out.println();
     }
 }

@@ -48,7 +48,24 @@ public class UserDaoJDBC implements UserDao {
 
     @Override
     public void update(User obj) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "UPDATE user " +
+                            "SET Name = ?, UserType = ?, Email = ?, CommodityId = ? " +
+                            "WHERE Id = ?");
+            st.setString(1, obj.getName());
+            st.setString(2, obj.getUserType());
+            st.setString(3, obj.getEmail());
+            st.setString(4, obj.getCommodity().getId());
+            st.setString(5, obj.getId());
 
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
