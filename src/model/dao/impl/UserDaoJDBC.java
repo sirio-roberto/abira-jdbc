@@ -70,7 +70,20 @@ public class UserDaoJDBC implements UserDao {
 
     @Override
     public void deleteById(String id) {
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement("DELETE FROM user WHERE Id = ?");
+            st.setString(1, id);
 
+            int affectedRows = st.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DbException("User whose Id is " + id + " does not exist");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
